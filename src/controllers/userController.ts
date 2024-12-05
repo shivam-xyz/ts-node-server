@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import User from '../models/userModel';
 
 const users = [
     { id: 1, name: "Suza Zuja" },
@@ -7,8 +8,19 @@ const users = [
 
 export const getUsers = async (req: Request, res: Response) => {
     try {
-        const allUsers = await users;
-        res.status(200).send({ message: "All Users Fetched Successfully", data: allUsers });
+        // const allUsers = await users;
+        // res.status(200).send({ message: "All Users Fetched Successfully", data: allUsers });
+
+        const latestUsers = await User.aggregate([
+            {$sort : { createdAt : -1 }},
+            {$limit : 25}
+        ]);
+
+        res.status(200).send({
+            message : "Latest 25 users fetched successfully",
+            data : latestUsers
+        });
+
     } catch (error) {
         res.status(500).send({ message: "Internal Server Error" });
     }
