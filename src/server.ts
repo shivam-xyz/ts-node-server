@@ -8,7 +8,7 @@ const app = express();
 app.use(express.json());
 
 //DB Connection Initialization
-connectDB();
+// connectDB();
 
 //Use the user routes
 app.use('/api/users', userRoutes);
